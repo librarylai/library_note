@@ -2,6 +2,8 @@
 
 ###### tags: `筆記文章`
 
+![](https://i.imgur.com/jZI026v.png)
+
 ## React-testing-library 介紹
 
 **React-testing-library** 是基於 **DOM Testing Library** 所開發而成的，它增加了一些 API 來幫助我們對 React Component、React Hook 更方便的進行測試。

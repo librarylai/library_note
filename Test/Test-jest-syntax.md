@@ -2,6 +2,8 @@
 
 ###### tags: `筆記文章`
 
+![](https://i.imgur.com/OpGZv24.png)
+
 ## Jest 套件介紹與安裝
 
 ### Jest 介紹
