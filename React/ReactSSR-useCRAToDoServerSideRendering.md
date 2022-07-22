@@ -25,7 +25,7 @@ Client-Side Rendering 可以說是目前較常用的一種 render 模式，頁�
 
 簡單以 React 來舉例，檔案內只有一個 id 為 root 的根節點，也可以說它是一個容器(container)，而我們在專案內所寫的 React 程式碼都會在 boundle.js 裡面，透過讀取 boundle.js 後動態的將所要呈現的內容塞進【容器】裡面。
 
-```javascript=
+```jsx=
 <html>
     <head>...省略...</head>
     <body>
@@ -35,9 +35,9 @@ Client-Side Rendering 可以說是目前較常用的一種 render 模式，頁�
 </html>
 ```
 
-Client-Side Rendering 的優點是可以減少與 Server 端的互動，就以往的話，每個頁面都有一個 Html 檔，所以每當我們切換頁面時就得再跟 Server 去要一次新頁面的 Html 檔，如果是以前有寫過 PHP 的讀者應該不陌生。而現在 React 框架所做的 SPA 頁面就只有一個 Html 檔，在切換頁面時是透過 JavaScript 的方式去做到切換顯示不同的畫面，大大的減少了與 Server 端溝通所需的時間。
+Client-Side Rendering 的『優點』是可以減少與 Server 端的互動，就以往的話，每個頁面都有一個 Html 檔，所以每當我們切換頁面時就得再跟 Server 去要一次新頁面的 Html 檔，如果是以前有寫過 PHP 的讀者應該不陌生。而現在 React 框架所做的 SPA 頁面就只有一個 Html 檔，在切換頁面時是透過 JavaScript 的方式去做到切換顯示不同的畫面，大大的減少了與 Server 端溝通所需的時間。
 
-Client-Side Rendering 也有一些缺點，當使用者第一次進入到網站時，因為還沒有載入 JavaScript 所以會無法呈現畫面，而當專案越來越大時，代表 JS 檔也就會越來越肥大，這時所需要載入的時間就會越來越久(當然也有其他辦法可以解決，這邊留在之後的 Code Splitting 再來討論)，就容易讓使用者懷疑網站是不是壞掉，造成 UX 的不理想。
+Client-Side Rendering 也有一些『缺點』，當使用者第一次進入到網站時，因為還沒有載入 JavaScript 所以會無法呈現畫面，而當專案越來越大時，代表 JS 檔也就會越來越肥大，這時所需要載入的時間就會越來越久(當然也有其他辦法可以解決，這邊留在之後的 Code Splitting 再來討論)，就容易讓使用者懷疑網站是不是壞掉，造成 UX 的不理想。
 
 Client-Side Rendering 最主要的問題就是 SEO 評分過低的問題，因為 Server 端回應的 Html 檔只有 `<div id="root"/>` 這個 Tag 而沒有其他的內容，導致瀏覽器的**_爬蟲_** 無法正確的爬取網站的內容，這也是導致分數低落的主要原因。
 
@@ -46,21 +46,21 @@ Client-Side Rendering 最主要的問題就是 SEO 評分過低的問題，因�
 ![](https://i.imgur.com/FfuGvCs.png)
 ( Reference: [Client-side rendering vs. server-side rendering: which one is better](https://laptrinhx.com/client-side-rendering-vs-server-side-rendering-which-one-is-better-44494895/) )
 
-**_這邊的 Server-Side Rendering 是單純對名詞的解釋，與接下來所介紹的內容有些微差別 ex.換頁（ CRA 實作 SSR 較像是一個 混合框架 ）。_**
+**_這邊的 Server-Side Rendering 是單純對名詞的解釋，與接下來所介紹的內容有些微差別，像是換頁部分如果是在 CRA 實作 SSR 的情況下就比較較像是一個『混合框架』。_**
 
 Server-Side Rendering 就是當使用者進入網站時，Server 端就回應了包含完整內容的 Html 結構到瀏覽器中，之後才去載入 JavaScript 的部分，其實以前每切換一個頁面就去跟 Server 端要一隻 Html 檔來渲染的方式就是最典型的 Server-Side Rendering 的例子。
 
-Server-Side Rendering 的優點在於，使用者可以提早看到畫面，因為在 Server 端回應時就已經將畫面帶回來了，而也是因為這點所以在 SEO 的分數方面就能比在 CSR 上增加許多，因為瀏覽器的爬蟲就能夠正確的爬取到網頁的資訊。
+Server-Side Rendering 的『優點』在於，使用者可以提早看到畫面，因為在 Server 端回應時就已經將畫面帶回來了，而也是因為這點所以在 SEO 的分數方面就能比在 CSR 上增加許多，因為瀏覽器的爬蟲就能夠正確的爬取到網頁的資訊。
 
-Server-Side Rendering 的缺點在於，Server 端的負荷會比 CSR 來的嚴重，就以往早期的網頁模式來看，每切換一個頁面就會去跟 Server 端要新頁面的資料，而當使用者一爆多的時候就會容易造成 Server 的負荷過重而導致延遲等問題。
+Server-Side Rendering 的『缺點』在於，Server 端的負荷會比 CSR 來的嚴重，就以往早期的網頁模式來看，每切換一個頁面就會去跟 Server 端要新頁面的資料，而當使用者一爆多的時候就會容易造成 Server 的負荷過重而導致延遲等問題。
 
 ## Client 端架構與基本設定
 
 看完上面對於 Client-Side Rendering 與 Server-Side Rendering 的介紹後，現在我們就先來將 Client Side 的部分先建立起來吧。
 
-本篇主要以 Create React App 來實做 Server Side Rendering，CRA 可以說是一個 React 的 CLI，它能讓開發者們快速的建立起一個 React 專案，且預設就會幫我們將 webpack、eslint、typescript、babel...等設定完成，所以我們可以直接使用不需額外再去重新設定這些配置，非常方便。
+本篇主要以 **Create React App 來實做 Server Side Rendering**，CRA 可以說是一個 React 的 CLI，它能讓開發者們快速的建立起一個 React 專案，且預設就會幫我們將 webpack、eslint、typescript、babel...等設定完成，因此我們可以直接使用不需額外再去重新設定這些配置，非常方便。
 
-廢話不多說，直接先建一個 React 專案!!!
+#### 廢話不多說，直接先建一個 React 專案!!!
 
 ```javascript=
 npx create-react-app cra-ssr
@@ -97,7 +97,7 @@ module.exports = {
 }
 ```
 
-這邊是透過 `tsconfig.paths.json` 來設定路徑別名，相關內容可以往下滑到 TypeScript 的部分，這邊就不再額外贅述。
+這邊是透過 `tsconfig.paths.json` 來設定路徑別名，相關內容可以往下滑到 **TypeScript** 的部分，這邊就不再額外贅述。
 
 ##### package.json
 
@@ -117,7 +117,7 @@ module.exports = {
 
 **額外解法 : 透過 `express.static('build',{index: false})` 的第二個參數設定 index 為 false。**
 
-**:warning: 這邊的範例程式碼會將兩種方式一同使用，大家可以擇一使用即可。**
+**:notebook: 這邊的範例程式碼將會兩種方式一同使用 ( `index:false` 與 修改檔名)，大家可以擇一使用即可。**
 
 ## Server 端架構與基本設置
 
@@ -210,7 +210,7 @@ webpack 是一個 JavaScript 的模組打包器，可以透過一個或多個進
 
 #### 創建 .babelrc.json 設定檔
 
-在專案目錄下新增一個 .babelrc.json 設定檔，並將相關需要使用的套件加入到 presets 中
+在專案目錄下新增一個 **.babelrc.json** 設定檔，並將相關需要使用的套件加入到 presets 中
 
 ```javascript=
 {
@@ -221,7 +221,7 @@ webpack 是一個 JavaScript 的模組打包器，可以透過一個或多個進
 }
 ```
 
-接下來創建一支 webpack.server.js 並在 roules 增加使用 balbel-loader 的條件，我們可以直接在 webpack 中直接對 balbel-loader 做設定，不過這邊採用將設定拉到 babel 設定檔中(.babelrc.json ) 去處理，這樣 webpack 比較不會這麼冗長也比較乾淨。
+接下來創建一支 **webpack.server.js** 並在 roules 增加使用 balbel-loader 的條件，我們可以直接在 webpack 中直接對 balbel-loader 做設定，不過這邊採用將設定拉到 babel 設定檔中(.babelrc.json ) 去處理，這樣 webpack 比較不會這麼冗長也比較乾淨。
 
 ```javascript=
 const path = require('path');
@@ -332,7 +332,7 @@ TypeScript 是一個包裝在 JavaScript 之上的語言，也可以說是 JavaS
 
 ---
 
-**推薦 : 如果對 use、loader、opeion 不太熟得話，推薦看看 [Peter Chen - 尋覓 webpack - 14 - 配置 webpack - 模組 Module 的處理 ] [傳送門:door:](https://ithelp.ithome.com.tw/articles/10246047)**
+**推薦 : 如果對 use、loader、option 不太熟得話，推薦看看 [Peter Chen - 尋覓 webpack - 14 - 配置 webpack - 模組 Module 的處理 ] [傳送門:door:](https://ithelp.ithome.com.tw/articles/10246047)**
 
 ---
 
@@ -425,7 +425,7 @@ hydrate() 其實與 render() 是很相似的，而 hydrate 主要用在 ReactDOM
 
 簡單來說就是在 SSR 的情況下，Server 端渲染出靜態頁面後 boundle.js 會開始載入，當 boundle.js 載入完成後 React 並不會重新去產生所有的組件，而是透過 hydrate 的方式嘗試將現有的 DOM 節點加入 Event 事件等等，用來提高初次載入的效能。
 
-```javascript=
+```jsx=
 /* index.ts */
 // 一般 CRA 創建時的進入點 ( SSR時請改用下面 )
 ReactDOM.render(
@@ -474,16 +474,17 @@ app.listen(port, () => console.log('Example app is listening on port 3001.'))
 
 #### server 端處理 styled-component
 
-因為前端專案使用 styled-component 的方式來寫樣式，所以當 Server 端在 render 時需要將 App 的 style 取出並嵌入到 HTML 文件中的 head 裡面。
+因為前端專案使用 styled-component 的方式來寫樣式，所以當 Server 端在 render 時需要將 `<App/>` Component 的 style 取出並嵌入到 HTML 文件中的 `head` 裡面，因此這邊將 html 模板透過一個 function 來封裝，並且透過參數來決定要顯示哪些內容、哪些樣式...等。
+
 **參考文章 : [Dennis Brotzky - The simple guide to server-side rendering React with styled-components](https://medium.com/styled-components/the-simple-guide-to-server-side-rendering-react-with-styled-components-d31c6b2b8fbf)**
 
-```javascript=
+```typescript=
 /* server/template/html.js */
 
 type HtmlParams = {
-	body: string
-	styles: string
-	title: string
+    body: string
+    styles: string
+    title: string
 }
 const Html = ({ body, styles, title }: HtmlParams): string => `
   <!DOCTYPE html>
@@ -514,11 +515,11 @@ app.get('/', (req, res) => {
 
 ### 3. 讀取前端打包後的 JS 檔(簡易版)
 
-到目前為止我們已經完成在 server 端 render 出 react component 並且套入 CSS 樣式，但這樣只是單純的畫面而已，沒辦法與使用者進行互動（按鈕點擊）等相關操作，所以我們需要讀入打包後的 js 檔並透過 React.hydrate() 來將事件監聽附加到靜態 Html ( renderToString 產出的靜態 App component ) 上，這樣 JS 操作的部分就能正常的執行了，而基本能動的、最陽春的 SSR 就大功告成了。
+到目前為止我們已經完成在 server 端 render 出 React Component 並且套入 CSS 樣式，但這樣只是單純的畫面而已，『沒辦法與使用者進行互動（按鈕點擊）』等相關操作，因此我們需要『讀入打包後的 js 檔』並透過 React.hydrate() 來將事件監聽附加到靜態 Html ( renderToString 產出的靜態 App component ) 上，這樣 JS 操作的部分就能正常的執行了，而基本能動的、最陽春的 SSR 就大功告成了。
 
-**這邊拿上面 HTML Template 來舉個例子 :**
+**改寫一下上面的 HTML Template 模板 :**
 
-```javascript=
+```jsx=
 /* server/template/html.js */
  <!DOCTYPE html>
   <html>
@@ -535,9 +536,11 @@ app.get('/', (req, res) => {
 
 ### 4.讀取 build/app.html 來模擬真實情況
 
-上面的部分我們是直接去載入`<App/>`這個 Component，但在實務上我們應該是要去讀取打包後的檔案，而不是某一個元件，因此這邊將會來模擬真實情況。
+上面的部分我們是『直接去載入`<App/>`這個 Component』，但在**實務上**我們應該是要去『讀取打包後的檔案』，而不是某一個元件，因此這邊將會來模擬一下實際情況。
 
-那在開始時實做之前讓我們回頭想想為什麼要做 Server-Side-Rendering ? 這是因為我們打包出來的 app.html 只會有一個 id 為 root 的 div HTML Tag，其餘的程式碼是透過讀取 JS 檔後動態產生的，導致搜索引擎爬蟲在一開始爬取網站時無法正確的抓到該頁面的程式碼，使得 SEO 分數低落。
+#### 那在開始時實做之前讓我們回頭想想為什麼要做 Server-Side Rendering ?
+
+這是因為我們打包出來的 app.html 只會有一個 `id` 為 root 的 `div` HTML Tag，其餘的程式碼是透過讀取 JS 檔後動態產生的，導致搜索引擎爬蟲在一開始爬取網站時無法正確的抓到該頁面的程式碼，使得 SEO 分數低落。
 
 所以要改善的部分最主要的就是【**讓程式碼能在 Server 端回應給瀏覽器時就產生出來**】，因此讓我們重新改寫一下 Server 檔。
 
@@ -555,7 +558,7 @@ app.get('/', (req, res) => {
             console.log('err:', err)
             return
         }
-        // 讀取完檔案後，將原本的 root  替換掉 靜態Html
+        // 讀取完檔案後，將原本的 root 替換成 靜態HTML
         return res.send(
             data.replace(
                 `<div id="root"></div>`,
