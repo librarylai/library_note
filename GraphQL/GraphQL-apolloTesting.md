@@ -262,6 +262,105 @@ it('2. Test Blog Error Situation', async () => {
 
 ![](https://i.imgur.com/BPepC2N.png)
 
+## 部落格 Mutation 測試
+
+剛剛在上面的內容主要都是在介紹關於『取資料(Query)』的部分，而現在要進入到『使用者操作的環節』，例如：新增文章、刪除文章...等操作。
+
+### 測試 - 新增文章
+
+在開始測試『新增』功能之前，我們先來看一下新增文章的 Demo 流程。
+
+![](https://i.imgur.com/PAj9kik.gif)
+
+整體步驟大致為『點擊新增按紐』->『顯示彈窗』->『輸入表題(Title)』->『輸入內容(Content)』->『點擊確認按鈕』->『列表顯示內容』。
+
+> **提醒：** Mutation 跟 Query 比較不一樣的地方在於我們需要對元件進行一些操作，例如：『找到按鈕』並『觸發點擊事件』，因此這邊會用到 `queryByText` 與 `userEvent` 這兩個方法來達成這部分。
+
+#### 測試新增的 Mock Data :arrow_down:
+
+```javascript
+const mockAddPostData = [
+  {
+    request: {
+      query: ADD_POST_QUERY,
+      // variables 可以想像是 我們去預設當輸入參數為 多少時(variables)，則回傳值會是怎樣...
+      // 例如： 當輸入參數為 {title:'',content:'',authorId:1} 的話，則回傳 createPostData('1', '測試新增文章', '測試內容', 'library')
+      // 因此我們可以設計多個 variables 對應 result 的情況。
+      variables: {
+        title: '測試新增文章',
+        content: '測試內容',
+        authorId: 1,
+      },
+    },
+    result: {
+      data: {
+        addPost: [createPostData('1', '測試新增文章', '測試內容', 'library')],
+      },
+    },
+  },
+]
+```
+
+#### 測試程式碼 :arrow_down:
+
+```jsx=
+// 測試新增 mutation
+it('4. Test Add new Blog Situation', async () => {
+  const user = userEvent.setup()
+  const { container } = render(
+    <MockedProvider mocks={mockAddPostData} addTypename={false}>
+      <Index />
+    </MockedProvider>
+  )
+  // 找到 新增文章 按鈕
+  const addPostButton = await screen.queryByText('新增文章')
+  // 等待 addPostButton 被點擊後，打開 PostDialog 彈窗
+  await user.click(addPostButton)
+  // 找到 PostDialog 標題 input
+  const postDialogTitleInput = await screen.getByLabelText('postDialog-title').querySelector('input')
+  // 找到 PostDialog 內容 textbox
+  const postDialogContentInput = await screen.getByLabelText('postDialog-content')
+  // 找到 PostDialog 彈窗裡的『送出』按鈕
+  const addPostSubmitButton = await screen.queryByText('送出')
+  // 標題 填入『測試新增文章』
+  await user.type(postDialogTitleInput, '測試新增文章')
+  // 內容 填入『測試內容』
+  await user.type(postDialogContentInput, '測試內容')
+  // 等待 送出按鈕 被點擊
+  await user.click(addPostSubmitButton)
+  // 等待 mockProvider 非同步執行
+  await waitFor(() => new Promise((resolve) => setTimeout(resolve, 0)))
+  // 執行 Snapshot
+  expect(container).toMatchSnapshot()
+})
+```
+
+> **補充：檢測看看是否有正確找到元件**
+>
+> 在寫測試時，如果想確認是否有正確的抓到 DOM 的話，可以使用 console 搭配 **prettyDOM** 來檢測看看是否有正確找到。
+>
+> 像是想抓取 **Material UI** 的 `<TextField>` 這個輸入框時，如果透過 prettyDOM 來看會發現抓到的一個 `div` 裡面包著 `input`，因此需要再往內查詢，才會正確抓取 **input**。
+>
+> ```javascript=
+> console.log('addPostButton', prettyDOM(addPostButton))
+> ```
+
+#### Snapshot 結果 :arrow_down:
+
+從 Snapshop 檔案上可以看到 `mockAddPostData` 的 Result Data 顯示在 Snapshop 上，代表新增功能正常執行。
+
+![](https://i.imgur.com/eH6cRGh.png)
+
+## 結語
+
+這次透過 Apollo 官方提供的 `MockProvider` 來對 Query 與 Mutation 等操作進行單元測試，當然這不是唯一的測試方式，像是 [Testing Apollo Components using react-testing-library - Andrew Hansen](https://www.arahansen.com/testing-apollo-components-using-react-testing-library/) 這篇文章就是依舊使用專案內的 `ApolloProvider`，透過創建新的 `ApolloClient` 並且在 `resolvers` 中依照 Schema 結構塞入『假資料』來進行測試。
+
+而這兩種測試方式都各有優缺點，且在實作方面也不太相同，因此建議可以兩種類型的文章都看一下，再決定要導入哪種方案到專案中。
+
+#### 以上就是這次【 GraphQL Apollo Testing 】的全部內容，如有任何錯誤或冒犯的地方還請各位多多指教，謝謝您的觀看。
+
+#### Github : [https://github.com/librarylai/GraphQL-Blog](https://github.com/librarylai/GraphQL-Blog)
+
 ## Reference
 
 1. [Mocking Apollo GraphQL Queries in React Testing - Nick Scialli](https://typeofnan.dev/mocking-apollo-graphql-queries-in-react-testing/)

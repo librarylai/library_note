@@ -38,7 +38,7 @@
 
 - [【筆記】GraphQL 系列(三) - Scheme-first & Code-first 概念](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/HJv-yX3t9)
 
-- [【筆記】GraphQL 系列(四) - GraphQL Apollo Testing use react-testing-library（攥寫中...）](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/S1qcpAIjc)
+- [【筆記】GraphQL 系列(四) - GraphQL Apollo Testing use react-testing-library](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/S1qcpAIjc)
 
 ## JavaScript
 
