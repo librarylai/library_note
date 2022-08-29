@@ -351,6 +351,66 @@ it('4. Test Add new Blog Situation', async () => {
 
 ![](https://i.imgur.com/eH6cRGh.png)
 
+## 額外補充
+
+可以透過使用 **GitHub Actions** 來讓每一次 Push code 上去後都自動跑個測試。
+
+1. 先在專案內新增一個 **.github/workflows** 的資料夾。
+   ![](https://i.imgur.com/1it5U1i.png)
+2. 資料夾裡面建立一個 **`[檔案名稱].yml` (ex. main.yml)** 檔案。
+   Github 會自動放在 **.github/workflows** 路徑底下所有的 `.yml` 檔案，因此當如果內容較為複雜的話，也可以拆成多個 `.yml` 檔來各別跑每個 workflow。
+3. 加入設定檔 - Github Actions Workflow
+
+```yml=
+# Github workflows 名稱
+name: GraphQL-blog CI
+
+# 觸發條件
+on:
+  # 當 push code 到 master branch 時，這個 workflow 會被觸發
+  push:
+    branches: ['master']
+  # 當 pull_request 到 master branch 時，這個 workflow 會被觸發
+  pull_request:
+    branches: ['master']
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# job(任務)可以有很多個，像是 build 任務、test 任務 ... 等
+jobs:
+  # job - 測試任務
+  test:
+    # 運行環境
+    runs-on: ubuntu-latest
+    # test 這個工作裡的 執行步驟
+    steps:
+      # 使用別人寫好的 actions
+      - uses: actions/checkout@v3
+      # 使用別人寫好的 yarn actions
+      - name: Yarn CLI
+        uses: CultureHQ/actions-yarn@v1.0.1
+      # 執行 yarn install 與 yarn test
+      - name: yarn install and test
+        run: |
+          yarn install
+          yarn test
+
+```
+
+### 快速建立 Github Actions
+
+如果是第一次練習不知道如何下手的話，可以直接透過 Github Actions 頁面上面的 **『set up a workflow yoursel』** 來快速建立一個 Actions。
+
+![](https://i.imgur.com/rovIXT0.png)
+
+點擊 **『set up a workflow yoursel』** 進來後，我們可以發現到 Github 很貼心的已經幫我們將基本範例給寫完了，我們只需要依照我們的需求來調整一些 config 設定即可，而有些 actions 可能已經有其他開發者們寫好並發布了，因此可以先透過旁邊的 **『Marketplace』** 來搜尋一下是否已有現成的 actions 可以使用。
+
+![](https://i.imgur.com/v43saah.png)
+
+最後只需要按下 **『Start commit』** 按鈕，Github 就會自動將檔案與路徑(`.github/workflows`)一同幫我們創建完成，是不是很方便啊！！ :smile:
+
 ## 結語
 
 這次透過 Apollo 官方提供的 `MockProvider` 來對 Query 與 Mutation 等操作進行單元測試，當然這不是唯一的測試方式，像是 [Testing Apollo Components using react-testing-library - Andrew Hansen](https://www.arahansen.com/testing-apollo-components-using-react-testing-library/) 這篇文章就是依舊使用專案內的 `ApolloProvider`，透過創建新的 `ApolloClient` 並且在 `resolvers` 中依照 Schema 結構塞入『假資料』來進行測試。
@@ -366,3 +426,4 @@ it('4. Test Add new Blog Situation', async () => {
 1. [Mocking Apollo GraphQL Queries in React Testing - Nick Scialli](https://typeofnan.dev/mocking-apollo-graphql-queries-in-react-testing/)
 2. [Testing Apollo Components using react-testing-library - Andrew Hansen](https://www.arahansen.com/testing-apollo-components-using-react-testing-library/)
 3. [Testing React components - Apollo](https://www.apollographql.com/docs/react/development-testing/testing/#example-1)
+4. [實作開源小工具，與 Github Actions 的第一次相遇！- 莫力全 Kyle Mo](https://medium.com/starbugs/%E5%AF%A6%E4%BD%9C%E9%96%8B%E6%BA%90%E5%B0%8F%E5%B7%A5%E5%85%B7-%E8%88%87-github-actions-%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%9B%B8%E9%81%87-3dd2d70eeb)
