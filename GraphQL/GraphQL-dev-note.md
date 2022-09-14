@@ -384,6 +384,10 @@ generates:
    }
    ```
 
+### 實際範例截圖
+
+![](https://i.imgur.com/KF210gl.png)
+
 ## Reference
 
 1. [apollo-link-token-refresh](https://github.com/newsiberian/apollo-link-token-refresh)
