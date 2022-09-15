@@ -331,58 +331,123 @@ generates:
 
 在專案開發上面不免如一定會用到一些管理全域 State 的套件，例如：Redux、Vuex...等，而 Apollo 框架內建就有支援這個部份，它提供了幾個 function 讓我們可以快速的做到『創建』local state 並且與 React 結合，不再需要安裝一堆套件與寫一堆設定。
 
-#### 基本上我們常會用到這兩個 function
+#### 基本上常會使用以下兩個 function
 
-1. **makeVar**
-   主要用來『創建』與『更新』reactive variable。(可以當成是建立 local state)
+### 1. makeVar
 
-   #### Creating:
+主要用來『創建』與『更新』reactive variable。(可以當成是建立 local state)
 
-   ```typescript=
-   // localState.ts
-   // 『創建』購買彈窗 並 設定初始值
-   export const purchaseModalVar = makeVar<{
-       isModalOpen: boolean
-       price: number
-   }>({
-       // initial value
-       isModalOpen:false,
-       price:0
-   })
-   ```
+#### Creating:
 
-   #### Reading:
+```typescript=
+// localState.ts
+// 『創建』購買彈窗 並 設定初始值
+export const purchaseModalVar = makeVar<{
+    isModalOpen: boolean
+    price: number
+}>({
+    // initial value
+    isModalOpen:false,
+    price:0
+})
+```
 
-   上面我們透過 `makeVar` 建立了一個 `purchaseModalVar` 的 reactive variable，而我們可以直接透過 `purchaseModalVar()` 來讀取這個 reactive variable 的資料。
+#### Reading:
 
-   ```typescript=
-   // 『讀取』reactive variable 資料
-   console.log(purchaseModalVar())
-   ```
+上面我們透過 `makeVar` 建立了一個 `purchaseModalVar` 的 reactive variable，而我們可以直接透過 `purchaseModalVar()` 來讀取這個 reactive variable 的資料。
 
-   #### Modifying:
+```typescript=
+// 『讀取』reactive variable 資料
+console.log(purchaseModalVar())
+```
 
-   有新增一定就有『修改、更新』，而這個部分一樣直接透過 `makeVar` 建立出來的變數 (`purchaseModalVar`) 就可以直接做更新，我們可以將『新的 value』傳到 reactive variable 的第一個參數中。
+#### Modifying:
 
-   ```typescript=
-   // 『更新』reactive variable 資料
-   purchaseModalVar({
-       isModalOpen: true
-       price: 100
-   })
-   ```
+有新增一定就有『修改、更新』，而這個部分一樣直接透過 `makeVar` 建立出來的變數 (`purchaseModalVar`) 就可以直接做更新，我們可以將『新的 value』傳到 reactive variable 的第一個參數中。
 
-2. **useReactiveVar**
-   主要用來與 React 連結，看到 `use` 這個關鍵字相信大家應該就知道『它是一個 Reack hook』，還記得當 Redux 的 state 變更的時後，有使用到該 state 的 component 會重新 rerender，因此畫面也會跟著被更新。而 `useReactiveVar` 就是來讓 `reactive variable` 變更時重新 rerender component。
+```typescript=
+// 『更新』reactive variable 資料
+purchaseModalVar({
+    isModalOpen: true
+    price: 100
+})
+```
 
-   > The useReactiveVar hook can be used to read from a reactive variable in a way that allows the React component to re-render if/when the variable is next updated.
+### 2. useReactiveVar
 
-   ```typescript=
-   import {purchaseModalData} from '@/localState'
-   export function ShoppingModal() {
-     const purchaseModalData = useReactiveVar(purchaseModalVar);
-   }
-   ```
+主要用來與 React 連結，看到 `use` 這個關鍵字相信大家應該就知道『它是一個 Reack hook』，還記得當 Redux 的 state 變更的時後，有使用到該 state 的 component 會重新 rerender，因此畫面也會跟著被更新。而 `useReactiveVar` 就是來讓 `reactive variable` 變更時重新 rerender component。
+
+> The useReactiveVar hook can be used to read from a reactive variable in a way that allows the React component to re-render if/when the variable is next updated.
+
+```typescript=
+import {purchaseModalData} from '@/localState'
+export function ShoppingModal() {
+  const purchaseModalData = useReactiveVar(purchaseModalVar);
+}
+```
+
+### 補充： reactive variables 與 cache 搭配
+
+**reactive variables** 也可以用在 cache 機制中，還記得我們在 [【筆記】GraphQL 系列(二) - 瞭解 Apollo Client 與 Apollo cache 機制](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/rkJ0kqGQc) 這篇中提到過『可以透過 `typePolicies` 與 `@client` 來客製化本地欄位(local field)』。
+
+而在 `typePolicies` 裡面我們會使用到 `read` 或是 `merge` 這兩個 function 來實作 field 的讀取與合併。
+
+> **補充 - 何謂 merge function：**
+> Whenever an incoming object has the same cache ID as an existing cached object, the fields of those objects are merged
+>
+> 簡單來說就是：當同一個 cacheID 有新的資料傳入時就會觸發 merge function，一般來說『預設(default)』會自動『覆蓋』掉舊的資料（使用 incoming object）。
+> 例如：當『實作分頁功能』時，我們會將原本的資料(existing object)與新的資料(incoming object)在 merge function 裡面做合併，而不是直接使用 incoming object。
+>
+> **詳細可參考：**[Store normalized objects - Apollo](https://www.apollographql.com/docs/react/caching/overview#4-store-normalized-objects)
+
+```typescript=
+/* 這邊偷懶 直接用官方範例 */
+import { makeVar } from '@apollo/client';
+// 產生 local state => reactive variables
+export const cartItemsVar = makeVar([]);
+
+// cache 設定，透過 typePolicies 來操作 cache
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        cartItems: {
+          read() {
+            // 讀取 cartItems 欄位時，直接將 cartItemsVar 這個 reactive variables 的資料回傳。
+            return cartItemsVar();
+          }
+          merge(existing,incoming){
+             // 模擬情境：當 cartItemsVar 有值則將 舊資料 與 新資料 合併
+              if(cartItemsVar().length > 0){
+                  return [...existing,...incoming]
+              }
+              // 否則，直接使用新資料
+              return incoming
+          }
+        }
+      }
+    }
+  }
+});
+
+/* Apollo client 加入 cache 設定*/
+const apolloClient = new ApolloClient({
+    /*...審略...*/
+    cache,  //  new InMemoryCache({...})
+})
+
+/* GraphQL Query 部分 */
+
+// 注意這邊的 @client 代表是『來自於前端 typePolicies 的欄位』
+// 簡單來說：只要看到 @client 它就是 local field。
+export const GET_CART_ITEMS = gql`
+  query GetCartItems {
+    cartItems @client
+  }
+`;
+```
+
+> **關於 reactive variable 與 cache 的部分，詳細可參考：** [Storing local state in reactive variables - Apollo](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#storing-local-state-in-reactive-variables)
 
 ### 實際範例截圖
 
