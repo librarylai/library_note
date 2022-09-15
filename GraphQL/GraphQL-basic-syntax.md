@@ -13,6 +13,8 @@
 > 1.  [【筆記】GraphQL 系列(一) - 基本語法篇](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/HJlKXB0b9)
 > 2.  [【筆記】GraphQL 系列(二) - 瞭解 Apollo Client 與 Apollo cache 機制](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/rkJ0kqGQc)
 > 3.  [【筆記】GraphQL 系列(三) Scheme-first & Code-first 概念](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/HJv-yX3t9)
+> 4.  [【筆記】GraphQL 系列(四) - GraphQL Apollo Testing use react-testing-library](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/S1qcpAIjc)
+> 5.  [【筆記】GraphQL 系列(五) - GraphQL 開發雜記、套件](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/BkvyKgo1o)
 
 > #### 本篇內容主要參考以下文件與文章：
 >
@@ -750,7 +752,7 @@ addPost({ variables: { title: '我是 title', content: '我是 content', authorI
 
 #### 以上就是這次【 GraphQL 語法篇 】的全部內容，希望對想了解 Ｇ raphQL 的人能有一點點幫助，如有任何錯誤或冒犯的地方還請各位多多指教，謝謝您的觀看。
 
-#### Github : [https://github.com/librarylai/GraphQL-Blog](https://github.com/librarylai/GraphQL-Blog)
+#### GitHub : [https://github.com/librarylai/GraphQL-Blog](https://github.com/librarylai/GraphQL-Blog)
 
 ## Reference
 
