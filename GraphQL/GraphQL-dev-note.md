@@ -141,6 +141,8 @@ const refreshLink = new TokenRefreshLink(formatRefreshLinkParams())
 
 ## 使用 GraphQL Code Generator
 
+![](https://i.imgur.com/pWdADQO.png)
+
 以往我們在使用 Apollo Client 撰寫 GraphQL 時，經常會使用 Apollo 所提供的 `useQuery`、`useMutation` 這兩個方法來進行查詢與操作(新增、修改、刪除...等)，它們大致上的用法如下：
 
 ```javascript=
