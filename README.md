@@ -40,6 +40,8 @@
 
 - [【筆記】GraphQL 系列(四) - GraphQL Apollo Testing use react-testing-library](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/S1qcpAIjc)
 
+- [【筆記】GraphQL 系列(五) - GraphQL 開發雜記、套件](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/BkvyKgo1o)
+
 ## JavaScript
 
 - [【筆記】Execute Context & Scope Chain 筆記](https://hackmd.io/@9iEIv7CwQuKe2LizHnDhaQ/Hkkb6T5dD)
