@@ -39,7 +39,7 @@ Redux Toolkit 主要是用來解決 Redux 的三個常見問題
 
 - [**configureStore()**](https://redux-toolkit.js.org/api/configureStore) : `configureStore` 包裝了原本 Redux 的`createStore` 簡化了設定的流程，它可以自動結合 slice reducers、加入任何 Redux Middleware 與啟動 Redux DevTools 擴充套件。
 
-```javascript=
+```jsx=
 import { configureStore } from '@reduxjs/toolkit'
 import rootReducer from './reducers'
 const store = configureStore({
@@ -56,7 +56,7 @@ const store = configureStore({
   **以往 Redux Reducer 的寫法**
   基本上偏向使用 `switch case` 的方式去處理每一個 action type。
 
-  ```javascript=
+  ```jsx=
   const initialState = { value: 0 }
   function counterReducer(state = initialState, action) {
      switch (action.type) {
@@ -74,7 +74,7 @@ const store = configureStore({
 
   createReducer 主要有兩個參數，第一個是 `initialState` 代表 reducer 的初始值，第二個是 callback function`(builder: Builder) => void` 透過 Builder 物件裡面的 `addCase` 去定義 reducer 裡面的每一個 case。
 
-  ```javascript=
+  ```jsx=
   const reducer = createReducer(
     {
       counter: 0,
@@ -377,7 +377,7 @@ export const useAppDispatch = () => useDispatch<AppDispatch>() // Export a hook 
 
 通過在 `src/index.tsx` 中加入 React Redux 的 `<Provider>` component，讓 Redux store 裡面的資料能透過 props 傳入到整個專案中。
 
-```javascript=
+```jsx=
 import { store } from '@/store/store'
 import { Provider } from 'react-redux'
 //...
@@ -479,7 +479,7 @@ export const store = configureStore({
 
 從畫面上可以看到，當進入 `ScrollAnimation` 時 Redux 會觸發了 `news/fetchNewsAPI/pending` 與 `news/fetchNewsAPI/fulfilled` 這兩個 action，還記得我們在上面 `newsSelice` 中設定了 `fulfilled` 的情況嗎 ? 忘記了可以往上滑看看程式碼，大概意思是:【當 `fulfilled` 時將 api 的 responce data 寫進 newsData 中】，所以這邊可以看到在 `fulfilled` 時 newsData 裡面有了資料。最後在離開時觸發 `news/cleanNewsData` 將 newsData 清空。
 
-```javascript=
+```jsx=
 /* ScrollAnimationPage.tsx */
 const ScrollAnimationPage = (props: Props) => {
     /* ...審略...  */
@@ -538,10 +538,10 @@ export default ScrollAnimationPage
 PS. 在後端就預先載入資料的會抓取英文版資料，而如果是回到前端才抓取資料的會是中文版資料。
 
 ![](https://i.imgur.com/kxABr4y.png)
-( 純 Component 的 HTML 結構)
+( **純 Component 的 HTML 結構**)
 
 ![](https://i.imgur.com/aOKhUxK.png)
-( 包含內容的 HTML 結構 )
+( **包含內容的 HTML 結構** )
 
 #### 接下來的內容大致可分為以下幾個步驟:
 
@@ -558,7 +558,7 @@ PS. 在後端就預先載入資料的會抓取英文版資料，而如果是回�
 
 要在 Server-Side 中也能使用 Redux 不外乎就是要把 `<Provider>` 也加到 Server 中，Store 的部分就直接引入上面所建立的 Store 即可。
 
-```javascript=
+```jsx=
 import { store } from '@/store/store'
 import { Provider } from 'react-redux'
 /* 部分程式碼可看上一章  */
@@ -678,7 +678,7 @@ export default serverSideRoutes
 
 #### 補充: 在 `react-router v6` 中，我們也可以使用 `useRoutes` 加上 router config 來代替一個一個手寫 `<Route .../>` 元件。
 
-```javascript=
+```jsx=
 // 原版
 <Container>
     <Route path="/" element={<ExpandingCardsPage />}/>
@@ -696,7 +696,7 @@ export default serverSideRoutes
 
 還記得我們剛剛在上面已經做到能夠將找到該 `path` 是哪個 `component` 了吧，現在我們就要來處理呼叫 `component` 的 `getServerSideProps` 這部分的邏輯。先上程式碼~~~
 
-```javascript=
+```jsx=
 /* server/index.tsx */
 
 // 實作處理 getServerSideProps
@@ -727,7 +727,7 @@ function getServerSidePropsPromise(req: express.Request) {
 
 因此我們在呼叫完 `getServerSidePropsPromise` 後還需要對這些 Promise 再進行一次處理，才會取得最後要傳給 component 的 props。
 
-```javascript=
+```jsx=
 app.get('*', async (req, res) => {
     let serverSidePropsList: Array<IServerSideProps | null> = []
     let serverSidePropsPromise = getServerSidePropsPromise(req)
@@ -754,7 +754,7 @@ app.get('*', async (req, res) => {
 
 最後我們將這個 `serverSidePropsList` 塞進 `<App>` component 中，讓它一路傳給所需要的 component，這樣 component 就能夠在回傳 HTML 給 broswer 之前，就預先 render 出含有內容的 HTML 結構了。
 
-```javascript=
+```jsx=
 const App:React.FC<IApp> = ({ serverSideProps }) => {
     // 審略其餘內容
     reutrn(
@@ -775,7 +775,7 @@ const App:React.FC<IApp> = ({ serverSideProps }) => {
 
 補充 : `staticHTML` 是透過 React 提供的 `renderToString` 將 React element render 成 HTML 並回傳 HTML String。以這邊的例子來說 : `staticHTML` 就是 React 將含有資料的 `ScrollAnimatePage` 解析成 HTML String 的回傳值。
 
-```javascript=
+```jsx=
  res.send(`
     <!DOCTYPE html>
     <html>
@@ -874,7 +874,7 @@ export const store = configureStore({...commonOptions})
 還記得我們在 Server Side 時我們將 `getServerSideProps` 的回傳值傳到 `<App>` 元件中(`<App serverSideProps={serverSidePropsList} />`)，現在我們也將這些資料傳到
 Client Side 的 `index.tsx` 中，再透過 Props 傳入到 `<App>` 元件裡，這樣前後端就可以達到資料一致、畫面一致。
 
-```javascript=
+```jsx=
 /* src/index.tsx */
 loadableReady(() => {
     ReactDOM.hydrate(
