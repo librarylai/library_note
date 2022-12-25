@@ -6,7 +6,7 @@
 
 最近剛好與朋友討論到將『前端畫面直接轉成 PDF 下載、列印』的部分，所以就整理了幾套關於這部分的 React 套件。
 
-## react-to-pdf
+## 套件介紹： react-to-pdf
 
 > **GitHub**：[**react-to-pdf**](https://github.com/ivmarcos/react-to-pdf#readme) > **安裝：** yarn add react-to-pdf
 
@@ -57,7 +57,7 @@ const pdfRef = useRef()
 
 ![](https://i.imgur.com/IdmNRF4.gif)
 
-## react-to-print
+## 套件介紹：react-to-print
 
 > **GitHub**：[**react-to-print**](https://github.com/gregnb/react-to-print) >**安裝：** yarn add react-to-print
 
@@ -102,7 +102,7 @@ function Print(){
 
 2. **use useReactToPrint Hook**
    **react-to-print** 也很貼心的提供 `useReactToPrint` Hook 的方式來讓我們用更少的步驟完成列印的功能。
-   仔細看可以發現，Hook 與 Component 所需要設定的內容很相似，差別在於一個是在 Hook function argument 上，一個是寫在 Component props 上。而兩種方法沒有誰好誰壞，可以自行依照實際情境來選擇其中一種方式使用。
+   仔細看可以發現，Hook 與 Component 所需要設定的內容很相似，差別在於一個是在 Hook 的 function argument 上，一個是寫在 Component props 上。而兩種方法沒有誰好誰壞，可以自行依照實際情境來選擇其中一種方式使用。
 
 ```jsx=
 import { useReactToPrint } from 'react-to-print'
@@ -145,7 +145,88 @@ function Print(){
 
 ![](https://i.imgur.com/IwywvBu.gif)
 
-## React-PDF (Render PDF 內容到頁面中)
+## 工作實作補充
+
+### 1. Print 預覽時，最後面永遠多一頁『空白頁』
+
+可以透過在你的 Component 中的最外層加入 `overflow:hidden` 來解決。
+
+```jsx=
+const Page = () =>{
+    const handlePrint = useReactToPrint({
+        content: () => /* 下面那個 Component，詳細設定請回看上面內容*/,
+    })
+/*
+ * 我是一個要來觸發產生 Print 預覽的頁面
+ * (ex.帳單頁、說明頁...等)
+*/
+    return (
+        <div>
+            <PrintComponent ref={...xxx}/>
+        </div>
+    )
+}
+
+const PrintComponent = () =>{
+    /*
+     * 這裡是放你要『列印的內容』
+     * 簡單舉例如下：*/
+    return(
+        /* 重點是這邊～～～～
+         * 最外層加入  overflow:'hidden' 來防止『無謂的空白頁』*/
+        <div style={{overflow:'hidden'}}>
+            <p>帳單詳細 PDF 檔</p>
+            <p>日期：111/12/23</p>
+            <p>內容：......xxxxx</p>
+        </div>
+    )
+}
+
+```
+
+### 2. 透過 `@page` 與 `media @print` 來對 Print 頁面做一些設定
+
+這部分目前測試下來 **Safari 不支援**，因此『**建議推薦使用者在 Chrome 上進行下載**』，直接分享一下實務上用的設定
+
+```css=
+ @page {
+    size: auto;
+    margin: 0mm /* 可依照專案自行調整 */
+  }
+
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact;
+    }
+    tr {
+      /* 為了不要讓 tr 在中間被換頁切掉
+       * 此設定代表：每次都以一個 tr 為基準，『禁止在 tr 中間被切割』*/
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .page-break {
+      /* 強制該 區塊 後面直接換頁 */
+      page-break-after: always;
+    }
+    .page-break-avoid {
+      /* 禁止該 區塊 中間『不可被換頁』 */
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  }
+```
+
+### 3. `PrintComponent` 只在 Print 預覽時顯示
+
+可以在 **Page** 層使用 `PrintComponent` 時，外面多包一個 DOM 並加上 `display:none` 來隱藏該元件。
+
+```jsx=
+<div style={{ display: "none" }}><ComponentToPrint ref={componentRef} /></div>
+```
+
+詳細可參考：[How do you make ComponentToPrint show only while printing - react-to-print](https://github.com/gregnb/react-to-print#how-do-you-make-componenttoprint-show-only-while-printing)
+
+## 套件介紹：React-PDF (Render PDF 內容到頁面中)
 
 > **GitHub**：[**React-PDF**](https://github.com/wojtekmaj/react-pdf) > **安裝**： yarn add react-pdf
 
