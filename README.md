@@ -26,6 +26,10 @@
 
 - [【筆記】 Create-React-App 也能動態 Open Graph](https://hackmd.io/@Librarylai/BkLZIWi_o)
 
+## 部署 CI/CD
+
+- [【筆記】前端 CI/CD 部署到 GCP 系列(一) - 建構篇(Next.js、Docker、Artifact Registry、Cloud Run)](https://hackmd.io/@Librarylai/HkwVS-Mp2)
+
 ## LINE Bot
 
 - [【筆記】LINE Bot 系列（一）創建自己的 LINE 官方帳號與相關設定 - 無程式碼篇](https://hackmd.io/@Librarylai/S17rU1T52)
