@@ -2,6 +2,12 @@
 
 ###### tags: `筆記文章`、`分享會`
 
+## 部署 CI/CD
+
+- [【筆記】前端 CI/CD 部署到 GCP 系列(一) - 建構篇(Next.js、Docker、Artifact Registry、Cloud Run)](https://hackmd.io/@Librarylai/HkwVS-Mp2)
+
+- [【筆記】前端 CI/CD 部署到 GCP 系列(二) - Github Action 整合自動化部署到 Cloud Run](https://hackmd.io/@Librarylai/S17LMlG0h)
+
 ## React
 
 - [【筆記】SSR 系列第三集【Redux Toolkit & GetServerSideProps】](https://hackmd.io/@Librarylai/r1vn47vcY)
@@ -25,10 +31,6 @@
 - [【筆記】React PDF 相關套件](https://hackmd.io/@Librarylai/r1_PI00-j)
 
 - [【筆記】 Create-React-App 也能動態 Open Graph](https://hackmd.io/@Librarylai/BkLZIWi_o)
-
-## 部署 CI/CD
-
-- [【筆記】前端 CI/CD 部署到 GCP 系列(一) - 建構篇(Next.js、Docker、Artifact Registry、Cloud Run)](https://hackmd.io/@Librarylai/HkwVS-Mp2)
 
 ## LINE Bot
 
