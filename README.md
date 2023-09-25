@@ -32,6 +32,8 @@
 
 - [【筆記】 Create-React-App 也能動態 Open Graph](https://hackmd.io/@Librarylai/BkLZIWi_o)
 
+- [【筆記】Next13 使用 Next-auth 實作第三方登入](https://hackmd.io/@Librarylai/Hkyq5xhk6)
+
 ## LINE Bot
 
 - [【筆記】LINE Bot 系列（一）創建自己的 LINE 官方帳號與相關設定 - 無程式碼篇](https://hackmd.io/@Librarylai/S17rU1T52)
